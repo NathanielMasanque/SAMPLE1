@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery Form</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+    <style>
+        /* CHANGING THE FONT SIZE OF THE ION ITEMS */
+ion-item{
+    font-family: 'Arial', sans-serif;
+    --background: rgba(223, 150, 233, 0.659);
+    
+}
+/* CHANGING THE HEADER COLOR */
+#headnshoulder{ 
+    --background: #bc1ddc; 
+    color: white;  
+    
+}
+/* CHANGING THE COLOR OF THE SUBMIT BUTTON*/
+ion-button{
+    --background: #bc1ddc;
+}
+/* INSERTING A BACKGROUND IMAGE */
+ion-content.background{
+    --background: url(bts.jpg) 0 0/100% 100% no-repeat;  
+}
+/* CHANGING THE RECEIPT FONT */
+ion-card-title {
+    font-family: serif;
+    color: #e659e6;
+    font-weight: bold;
+    font-size: 17px;
+    text-transform: uppercase;
+}
+    </style>
+</head>
+<body>
+<ion-app>
+    <!-- TOOLBAR THE NAME OF THE APPLICATION WITH SOME ICON-->
+    <ion-header>
+        <ion-toolbar id="headnshoulder">
+        <ion-title><ion-icon name="fast-food-outline"></ion-icon> FOOD DELIVERY FORM</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+        <ion-content padding class="background">
+        
+        <!-- DELIVERY ADDRESS AND INSERTED SOME ICON-->
+        <ion-list >
+        <ion-item>
+                <ion-label position="floating"><ion-icon name="bicycle-outline"></ion-icon> Delivery Address:</ion-label>
+                <ion-input id="deliver" type="text"></ion-input>
+        </ion-item>
+        <!-- PAYMENT SELECTION WHERE YOU CAN SELECT CASH,CREDIT CARD OR PAYPAL -->
+        
+            <ion-item>
+                <ion-select id="paymentMethod" label="Payment Method" placeholder="Choose your payment method">
+                    <ion-select-option value="Cash">Cash</ion-select-option>
+                    <ion-select-option value="Credit Card">Credit Card</ion-select-option>
+                    <ion-select-option value="PayPal">PayPal</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <!-- SAVING THE PAYMENT METHOD WITH ICON-->
+            <ion-item>
+                <ion-checkbox id="SavePayment"><ion-icon name="bag-remove-outline"></ion-icon> Remember Payment Method</ion-checkbox>
+            </ion-item>
+
+            <!-- THE FOOD PRICE INPUT WITH ICON -->
+        <ion-item>
+            <ion-label position="floating"><ion-icon name="pricetags-outline"></ion-icon>  Input Food Price</ion-label>
+            <ion-input id="foodprice" type="number"></ion-input>
+        </ion-item>
+
+        <!-- THIS IS WHEN YOU SELECTED CASH THIS WILL APPEAR -->
+            
+        <ion-item id="CashOnHand" style="display: none">
+            <ion-label position="floating"><ion-icon name="hand-left-outline"></ion-icon> Cash On Hand</ion-label>
+            <ion-input id="cashon" aria-placeholder="Enter your cash" type="number"></ion-input>
+        </ion-item>
+
+        <!-- THE RESULT SUMMARY OF THE FORM -->
+        <ion-card id="Rcontent" style="display: none" class="cardkoto">
+            <ion-card-header id="infoContent">
+                <ion-card-title>Delivery Address:</ion-card-title>
+                <ion-card-subtitle id="address"></ion-card-subtitle>
+                <ion-card-title>Payment Method</ion-card-title>
+                <ion-card-subtitle id="payment"></ion-card-subtitle>
+                <ion-card-title>Food Price</ion-card-title>
+                <ion-card-subtitle id="price"></ion-card-subtitle>
+                <ion-card-title id="remainingID">Remaining Cash</ion-card-title>
+                <ion-card-subtitle id="remainingCASHID"></ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-header id="saveResult"></ion-card-header>
+        </ion-card>
+        
+        <!-- BUTTON TO THE SUBMIT YOUR ORDER -->
+         <br>
+        <ion-button expand="full" onclick="triggerMode()">SUBMIT YOUR ORDER</ion-button>
+
+        </ion-list>
+
+</ion-app>
+
+<script>
+     // EVENT LISTENER OF THE SELECTED CASH
+    document.getElementById('paymentMethod').addEventListener('ionChange', toggleInput);
+
+    // EVENT TRIGGER OF THE CASH ON HAND CASH
+    function toggleInput(){
+            let paymentMethod = document.getElementById('paymentMethod').value;
+            let CashOnH  = document.getElementById('CashOnHand');
+
+            // THIS IS WHEN YOU SELECTED THE CASH INPUT, THE CASH ON HAND WILL DISPLAY
+            if(paymentMethod == 'Cash'){
+                CashOnH  .style.display = 'block';
+            }else{
+                CashOnH  .style.display = 'none';
+            }
+        }
+
+    function triggerMode() {
+         // HERE'S MY INPUTS
+        let address = document.getElementById('deliver').value;
+        let paymentMethod = document.getElementById('paymentMethod').value;
+        let foodPrice = parseFloat(document.getElementById('foodprice').value);
+        let PaymentChecked = document.getElementById('SavePayment').checked;
+        let cashon = parseFloat(document.getElementById('cashon').value);
+         // THIS IS WHEN PAYMENT WILL BE REMEMBER OR SAVED
+        if (PaymentChecked) {
+            document.getElementById('saveResult').innerText = "Payment Method will be remembered.";
+            document.getElementById('address').innerText = address;
+            document.getElementById('payment').innerText = paymentMethod;
+            document.getElementById('price').innerText = foodPrice;
+            document.getElementById('infoContent').style.display = "block";
+            document.getElementById('Rcontent').style.display = "block";
+         // THIS IS THE METHOD WHEN CALCULATING THE REMAINING AMOUNT AFTER DEDUCTING FOOD PRICE 
+        if (paymentMethod == 'Cash') {
+            // SHOW THE REMAINING AMOUT
+            let remainingCash = cashon - foodPrice;
+        // UPDATE THE INNER TEXT OF THE REMAINING AMOUNT OR SHOW "INSUFFICIENT" IF NOT ENOUGH CASH
+            document.getElementById('remainingCASHID').innerText = remainingCash >= 0 ? remainingCash : "Insufficient funds";
+            document.getElementById('remainingID').style.display = "block";
+        } else {
+            // IF THE PAYMENT THOD IS NOT ACSH, HIDE THE REMAINING CASH INFO
+            document.getElementById('remainingCASHID').style.display = 'none';
+            document.getElementById('remainingID').style.display = 'none';
+        }
+        } 
+         // THIS IS WHEN YOU DID NOT CHECKED THE PAYMENT METHOD
+        else {
+            document.getElementById('saveResult').innerText = "Payment Method will not be remembered.";
+            document.getElementById('infoContent').style.display = "none";
+            document.getElementById('Rcontent').style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>

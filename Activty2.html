@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Delivery Form</title>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule src="https://cdn.jsdelivr.net/npm/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@ionic/core/css/ionic.bundle.css" />
+</head>
+<body>
+<ion-app>
+    <!-- TOOLBAR -->
+    <ion-header>
+        <ion-toolbar color = "tertiary">
+        <ion-title>FOOD DELIVERY FORM</ion-title>
+        </ion-toolbar>
+    </ion-header>
+
+    <ion-content>
+        <!-- DELIVERY -->
+        <ion-item>
+                <ion-label position="floating">Delivery Address:</ion-label>
+                <ion-input id="deliver" type="text"></ion-input>
+        </ion-item>
+        <!-- PAYMENT SELECTION -->
+        <ion-list>
+            <ion-item>
+                <ion-select id="paymentMethod" label="PAYMENT METHOD" placeholder="Choose your payment method">
+                    <ion-select-option value="Cash">CASH</ion-select-option>
+                    <ion-select-option value="Credit Card">CREDIT CARD</ion-select-option>
+                    <ion-select-option value="E-Wallet">E-WALLET</ion-select-option>
+                </ion-select>
+            </ion-item>
+
+            <!-- SAVE PAYMENT -->
+            <ion-item>
+                <ion-checkbox id="SavePayment">Remember Payment Method</ion-checkbox>
+            </ion-item>
+
+            <!-- PRICE INPUT -->
+        <ion-item>
+            <ion-label position="floating">Input Food Price</ion-label>
+            <ion-input id="foodprice" type="number"></ion-input>
+
+        </ion-item>
+
+        <!-- BUTTON -->
+        <ion-button expand="full" color="primary" onclick="triggerMode()">SUBMIT YOUR ORDER</ion-button>
+
+        <!-- RESULT SUMMARYY -->
+        <ion-card id="Rcontent" style="display: none">
+            <ion-card-header id="infoContent">
+                <ion-card-title>Delivery Address:</ion-card-title>
+                <ion-card-subtitle id="address"></ion-card-subtitle>
+                <ion-card-title>Payment Method</ion-card-title>
+                <ion-card-subtitle id="payment"></ion-card-subtitle>
+                <ion-card-title>Food PRICE</ion-card-title>
+                <ion-card-subtitle id="price"></ion-card-subtitle>
+            </ion-card-header>
+            <ion-card-header id="saveResult"></ion-card-header>
+
+        </ion-card>
+
+        </ion-list>
+
+</ion-app>
+
+<script>
+    function triggerMode() {
+         // Here's my input values
+        let address = document.getElementById('deliver').value;
+        let paymentMethod = document.getElementById('paymentMethod').value;
+        let foodPrice = document.getElementById('foodprice').value;
+        let PaymentChecked = document.getElementById('SavePayment').checked;
+
+         // Condition if my payment is saved
+        if (PaymentChecked) {
+            document.getElementById('saveResult').innerText = "Payment Method will be remembered.";
+            document.getElementById('address').innerText = address;
+            document.getElementById('payment').innerText = paymentMethod;
+            document.getElementById('price').innerText = foodPrice;
+            document.getElementById('infoContent').style.display = "block";
+            document.getElementById('Rcontent').style.display = "block";
+        } 
+         // If payment did not saved or checked.
+        else {
+            document.getElementById('saveResult').innerText = "Payment Method will not be remembered.";
+            document.getElementById('infoContent').style.display = "none";
+            document.getElementById('Rcontent').style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>
